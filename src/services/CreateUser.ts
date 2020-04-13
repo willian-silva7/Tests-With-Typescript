@@ -1,27 +1,27 @@
-
-
 // interface define os tipos de declarações, data que precisam para criar um usuário
 
-interface TechObject{
-  title: String,
-  experience: Number
+interface TechObject {
+  title: string;
+  experience: number;
 }
 
-interface CreateUserData{
-  name?: String, // ? Opcional
-  email: String,
-  password: String, // array de strings : string[]
-  techs: Array<String | TechObject>
+interface CreateUserData {
+  name?: string; // ? Opcional
+  email: string;
+  password: string; // array de strings : string[]
+  techs: Array<string | TechObject>;
 }
 
-export default function createUser({name= '', email, password}: CreateUserData){
+export default function createUser({
+  name = '',
+  email,
+  password,
+}: CreateUserData) {
   const user = {
-    name, 
+    name,
     email,
-    password
-  }
+    password,
+  };
 
-  return user
+  return user;
 }
-
-
