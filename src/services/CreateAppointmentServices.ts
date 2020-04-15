@@ -1,25 +1,20 @@
 import { startOfHour, parseISO } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import appointmentsRouter from '../routes/appointments.routes';
 
 interface Request {
-  provider: string;
+  provider_id: string;
   date: Date;
 }
 
 class CreateAppointmentService {
-  private appointmentRepository: AppointmentsRepository;
-
-  constructor(appointmentRepository: AppointmentsRepository) {
-    // Dependency Inversion (SOLID): dependencia externa, receber como parametro
-    this.appointmentRepository = appointmentRepository;
-  }
-
-  public execute({ date, provider }: Request): Appointment {
+  public async execute({ date, provider_id }: Request): Promise<Appointment> {
+    const appointmentRepository = getCustomRepository(AppointmentsRepository);
     const appointmentDate = startOfHour(date);
 
-    const findAppointmentInSameDate = this.appointmentRepository.findByDate(
+    const findAppointmentInSameDate = await appointmentRepository.findByDate(
       appointmentDate,
     );
 
@@ -27,10 +22,12 @@ class CreateAppointmentService {
       throw Error('This Appointment is already booked');
     }
 
-    const appointment = this.appointmentRepository.create({
-      provider,
+    const appointment = appointmentRepository.create({
+      provider_id,
       date: appointmentDate,
     });
+
+    await appointmentRepository.save(appointment);
 
     return appointment;
   }
