@@ -4,7 +4,6 @@ import {
   TableColumn,
   TableForeignKey,
 } from 'typeorm';
-import { Query } from 'typeorm/driver/Query';
 
 export default class AlterProviderFieldToProviderID1586952910262
   implements MigrationInterface {
